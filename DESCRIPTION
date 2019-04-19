@@ -19,9 +19,11 @@ Depends:
     R (>= 3.0.2),
     mlr (>= 2.11)
 Suggests: 
-    testthat,
     knitr,
-    rmarkdown
+    farff,
+    rmarkdown,
+    RWeka,
+    testthat,
 Imports:
     backports (>= 1.1.0),
     BBmisc (>= 1.11),
