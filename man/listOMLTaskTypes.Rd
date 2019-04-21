@@ -28,7 +28,8 @@ the cached results from the first call.
 You can reset the cache by calling \code{\link[memoise]{forget}} on the function manually.
 }
 \seealso{
-Other listing functions: \code{\link{listOMLEstimationProcedures}}
+Other listing functions: \code{\link{listOMLDataSets}},
+  \code{\link{listOMLEstimationProcedures}}
 }
 \concept{listing functions}
 \concept{task-related functions}

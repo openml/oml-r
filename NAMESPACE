@@ -3,6 +3,7 @@
 S3method(print,OMLConfig)
 export(clearOMLCache)
 export(getOMLConfig)
+export(listOMLDataSets)
 export(listOMLEstimationProcedures)
 export(listOMLTaskTypes)
 export(loadOMLConfig)
