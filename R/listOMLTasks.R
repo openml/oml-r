@@ -5,8 +5,8 @@
                          tag = NULL, data.name = NULL, data.tag = NULL,
                          limit = 5000, offset = NULL, status = "active", verbosity = NULL) {
   
-  estim.proc = new_listOMLEstimationProcedures(verbosity = 0) ################################
-  eval = new_listOMLEvaluationMeasures(verbosity = 0) ################################
+  estim.proc = listOMLEstimationProcedures(verbosity = 0) ################################
+  eval = listOMLEvaluationMeasures(verbosity = 0) ################################
   
   if (!is.null(evaluation.measures))
     assertSubset(evaluation.measures, choices = eval[, as.character(name)]) ############################
