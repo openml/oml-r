@@ -166,7 +166,7 @@ parseHTMLError = function(response) {
 # see parseHTMLError for signature
 parseXMLError = function(response) {
   content = rawToChar(response$content)
-  xml.doc = try(xmlParse(content, asText = TRUE), silent = TRUE)
+  xml.doc = try(xmlParse(content, asText = TRUE), silent = TRUE) # ? xml2::read_xml(content) ?
   if (is.error(xml.doc)) {
     return(list(code = "<NA>", message = "<NA>",
                 additional.information = "Unable to parse XML error response."))
