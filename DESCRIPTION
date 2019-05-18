@@ -32,6 +32,7 @@ Imports:
     data.table,
     httr,
     stringi,
+    XML,
     xml2,
     jsonlite,
     memoise (>= 1.0.0),
