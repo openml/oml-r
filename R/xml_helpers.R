@@ -1,12 +1,12 @@
 xmlNs = function(doc, path, optional) {
-  ns = getNodeSet(doc, path)
+  ns = xml2::xml_find_all(doc, path)
   if (length(ns) == 0L) {
     if (optional)
       NULL
     else
       stopf("Required XML node not found: %s", path)
   } else {
-    ns
+    ns 
   }
 }
 
@@ -16,7 +16,7 @@ xmlVal = function(doc, path, optional, fun) {
   if (is.null(ns))
     return(NULL)
   if (length(ns) == 1L) {
-    fun(xmlValue(ns[[1L]]))
+    fun(xml2::xml_text(ns[[1L]]))
   } else {
     stopf("Multiple XML nodes found: %s", path)
   }
@@ -79,8 +79,8 @@ xmlREValI = function(doc, path) {
 }
 
 xmlValsMultNs = function(doc, path, fun, val) {
-  ns = getNodeSet(doc, path)
-  vapply(ns, function(x) fun(xmlValue(x)), val)
+  ns = xml2::xml_find_all(doc, path)
+  vapply(ns, function(x) fun(xml_text(x)), val)
 }
 
 xmlValsMultNsS = function(doc, path) {

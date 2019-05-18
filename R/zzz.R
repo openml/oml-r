@@ -4,6 +4,8 @@
 #' @import ParamHelpers
 #' @import stringi
 #' @import jsonlite
+#' @import XML
+#' @import xml2
 #' @import data.table
 #' @importFrom httr POST GET DELETE content upload_file status_code
 #' @importFrom memoise memoise forget
