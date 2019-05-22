@@ -1,12 +1,17 @@
 .listOMLEstimationProcedures = function(verbosity = NULL) {
   content = doAPICall(api.call = "json/estimationprocedure/list", file = NULL,
                       verbosity = verbosity, method = "GET")
-  res = setDT(fromJSON(txt = content)$estimationprocedures$estimationprocedure)
+  res = fromJSON(txt = content)$estimationprocedures$estimationprocedure
   task.types = listOMLTaskTypes(verbosity = 0)
-  res[, c("id", "ttid") := .(as.integer(res$id), task.types[as.integer(res$ttid), as.character(name)])]
-  setnames(res, old = c("id", "ttid"), new = c("est.id", "task.type"))
-  setnames(res, convertNamesOMLToR(names(res)))
-  type.convert(res, as.is = TRUE, how = "replace")
+  setnames(task.types, c("ttid", "task.type"))
+  task.types[, "ttid" := as.character(ttid)]
+  ret = merge(task.types, res, by = "ttid")
+  ret[, c("id", "ttid") := .(as.integer(id), NULL)]
+  setnames(ret, "id", "est.id")
+  setkeyv(ret, "est.id") # sort by est.id...
+  setcolorder(ret) # ...and get est.id column in first position
+  setnames(ret, convertNamesOMLToR(names(ret)))
+  type.convert(ret, as.is = TRUE, how = "replace")
 }
 
 #' @title List available estimation procedures.

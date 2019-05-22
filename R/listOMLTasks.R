@@ -5,14 +5,14 @@
                          tag = NULL, data.name = NULL, data.tag = NULL,
                          limit = 5000, offset = NULL, status = "active", verbosity = NULL) {
   
-  estim.proc = listOMLEstimationProcedures(verbosity = 0) ################################
-  eval = listOMLEvaluationMeasures(verbosity = 0) ################################
+  estim.proc = listOMLEstimationProcedures(verbosity = 0)
+  eval = listOMLEvaluationMeasures(verbosity = 0)
   
   if (!is.null(evaluation.measures))
-    assertSubset(evaluation.measures, choices = eval[, as.character(name)]) ############################
+    assertSubset(evaluation.measures, choices = eval[, as.character(name)])
   if (!is.null(estimation.procedure)) {
-    assertSubset(estimation.procedure, choices = estim.proc[, as.character(name)]) ############################
-    estimation.procedure = estim.proc$est.id[estim.proc$name %in% estimation.procedure] ############################
+    assertSubset(estimation.procedure, choices = estim.proc[, as.character(name)])
+    estimation.procedure = estim.proc[name %in% estimation.procedure, est.id]
   }
   
   api.call = generateAPICall("json/task/list",
@@ -24,12 +24,12 @@
   
   content = doAPICall(api.call = api.call, file = NULL, verbosity = verbosity, method = "GET")
   
-  if (is.null(content)) return(data.table()) ############################
+  if (is.null(content)) return(data.table())
   
   res = fromJSON(txt = content, simplifyVector = FALSE)$tasks$task
   input = convertNameValueListToDF(extractSubList(res, "input", simplify = FALSE))
   # get rid of less interesting stuff
-  input = input[, which(colnames(input) %in% c("source_data", "target_value", "time_limit", "number_samples")) := NULL] # nolint
+  input[, which(colnames(input) %in% c("source_data", "target_value", "time_limit", "number_samples")) := NULL] # nolint
   qualities = convertNameValueListToDF(extractSubList(res, "quality", simplify = FALSE))
   # tags = convertTagListToTagString(res)
   # subset according to evaluation measure and estimation procedure
@@ -44,7 +44,7 @@
     input$estimation_procedure = NA
   } else {
     row.names(estim.proc) = estim.proc$est.id
-    input$estimation_procedure = estim.proc[as.numeric(input$estimation_procedure), as.character(name)] #############################
+    input$estimation_procedure = estim.proc[as.numeric(input$estimation_procedure), as.character(name)]
   }
   if (is.null(input$evaluation_measures)) input$evaluation_measures = NA_character_
   
@@ -54,16 +54,16 @@
   #res$quality = res$input = res$tags = NULL
   
   # build final dataframe
-  res = cbind(res, input, qualities) #############################
+  res = cbind(res, input, qualities)
   
   # convert to integer
-  cols = intersect(colnames(res), c(colnames(qualities), "did", "task_id")) #############################
-  res[, (cols) := lapply(.SD, as.integer), .SDcols = cols] #############################
+  cols = intersect(colnames(res), c(colnames(qualities), "did", "task_id"))
+  res[, (cols) := lapply(.SD, as.integer), .SDcols = cols]
   
   # finally convert _ to . in col names
-  names(res) = convertNamesOMLToR(names(res))
+  setnames(res, convertNamesOMLToR(names(res)))
   
-  return(res[ind.estim & ind.eval, ])
+  res[ind.estim & ind.eval, ][]
 }
 
 #' @title List the first 5000 OpenML tasks.

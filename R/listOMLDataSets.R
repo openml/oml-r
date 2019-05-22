@@ -24,12 +24,11 @@
   # convert to integer
   cols = intersect(colnames(res), colnames(qualities))
   if (length(cols) > 0)
-    res[, (cols) := lapply(.SD, as.integer), .SDcols = cols] 
+    res[, (cols) := lapply(.SD, as.integer), .SDcols = cols]
   
   # finally convert _ to . in col names
-  names(res) = convertNamesOMLToR(names(res))
-  
-  return(res)
+  setnames(res, convertNamesOMLToR(names(res)))
+  res[]
 }
 
 #' @title List the first 5000 OpenML data sets.

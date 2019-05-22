@@ -3,7 +3,8 @@
                       verbosity = verbosity, method = "GET")
   res = fromJSON(txt = content)$task_types$task_type
   ret = setDT(res[, c("id", "name")])
-  ret[, id := as.integer(id)][]
+  ret[, id := as.integer(id)]
+  ret[]
 }
 
 #' @title List available OpenML task types.
