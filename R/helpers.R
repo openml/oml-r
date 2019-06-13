@@ -22,7 +22,7 @@ convertNamesOMLToR = function(names) {
   # a_b_c to a.b.c
   new.names = stri_replace_all_fixed(names, "_", ".")
   # did to data.id
-  new.names = gsub("^did$", "data.id", new.names)
+  new.names = stri_replace_all_regex(new.names, "^did$", "data.id")
   # ServerVar to server.var
   new.names = gsub("([a-z])([A-Z])", "\\1.\\L\\2", new.names, perl = TRUE)
   # make first character lower case

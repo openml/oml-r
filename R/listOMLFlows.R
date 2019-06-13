@@ -11,7 +11,7 @@
   #flows$tags = vcapply(flows$tags, function(x) collapse(x, ", "))
 
   setnames(flows, convertNamesOMLToR(names(flows)))
-  setnames(flows, gsub("^id$", "flow.id", names(flows)))
+  setnames(flows, stri_replace_all_regex(names(flows), "^id$", "flow.id"))
   flows[]
 }
 
