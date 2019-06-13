@@ -28,10 +28,12 @@ the cached results from the first call.
 You can reset the cache by calling \code{\link[memoise]{forget}} on the function manually.
 }
 \seealso{
-Other listing functions: \code{\link{listOMLDataSets}},
+Other listing functions: \code{\link{listOMLDataSetQualities}},
+  \code{\link{listOMLDataSets}},
   \code{\link{listOMLEstimationProcedures}},
   \code{\link{listOMLEvaluationMeasures}},
-  \code{\link{listOMLTasks}}
+  \code{\link{listOMLRuns}}, \code{\link{listOMLSetup}},
+  \code{\link{listOMLStudies}}, \code{\link{listOMLTasks}}
 
 Other task-related functions: \code{\link{listOMLTasks}}
 }

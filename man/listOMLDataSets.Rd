@@ -71,8 +71,11 @@ the cached results from the first call.
 You can reset the cache by calling \code{\link[memoise]{forget}} on the function manually.
 }
 \seealso{
-Other listing functions: \code{\link{listOMLEstimationProcedures}},
+Other listing functions: \code{\link{listOMLDataSetQualities}},
+  \code{\link{listOMLEstimationProcedures}},
   \code{\link{listOMLEvaluationMeasures}},
+  \code{\link{listOMLRuns}}, \code{\link{listOMLSetup}},
+  \code{\link{listOMLStudies}},
   \code{\link{listOMLTaskTypes}},
   \code{\link{listOMLTasks}}
 }

@@ -3,9 +3,11 @@
                       verbosity = verbosity, method = "GET")
   res = fromJSON(txt = content)$estimationprocedures$estimationprocedure
   task.types = listOMLTaskTypes(verbosity = 0)
-  setnames(task.types, c("ttid", "task.type"))
-  task.types[, "ttid" := as.character(ttid)]
-  ret = merge(task.types, res, by = "ttid")
+  task.types.tmp = copy(task.types) # copy necessary, otherwise interferes with listOMLTaskTypes.R in 
+                                    # listOMLTasks.R (called in helpers.R l.118 [i.e. in generateAPICall])
+  setnames(task.types.tmp, c("ttid", "task.type"))
+  task.types.tmp[, "ttid" := as.character(ttid)]
+  ret = merge(task.types.tmp, res, by = "ttid")
   ret[, c("id", "ttid") := .(as.integer(id), NULL)]
   setnames(ret, "id", "est.id")
   setkeyv(ret, "est.id") # sort by est.id...
