@@ -4,7 +4,7 @@
   res = fromJSON(txt = content)$estimationprocedures$estimationprocedure
   task.types = listOMLTaskTypes(verbosity = 0)
   task.types.tmp = copy(task.types) # copy necessary, otherwise interferes with listOMLTaskTypes.R in 
-                                    # listOMLTasks.R (called in helpers.R l.118 [i.e. in generateAPICall])
+                                    # listOMLTasks.R (called in helpers.R l.118 [i.e. in generateAPICall()])
   setnames(task.types.tmp, c("ttid", "task.type"))
   task.types.tmp[, "ttid" := as.character(ttid)]
   ret = merge(task.types.tmp, res, by = "ttid")

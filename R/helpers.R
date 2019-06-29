@@ -105,7 +105,8 @@ generateAPICall = function(api.call, task.id = NULL, flow.id = NULL,
                            setup.id = NULL, run.id = NULL, uploader.id = NULL, task.type = NULL,
                            number.of.instances = NULL, number.of.features = NULL, number.of.classes = NULL,
                            number.of.missing.values = NULL, tag = NULL, data.name = NULL, data.tag = NULL,
-                           evaluation.measure = NULL, limit = NULL, offset = NULL, status = NULL) {
+                           evaluation.measure = NULL, limit = NULL, offset = NULL, status = NULL, 
+                           main_entity_type = NULL) {
 
   assertString(api.call)
   task.id = collapseNotScientific(assertIntegerish(task.id, null.ok = TRUE))
@@ -137,6 +138,7 @@ generateAPICall = function(api.call, task.id = NULL, flow.id = NULL,
   if (!is.null(status)) assertChoice(status, choices = getValidOMLDataSetStatusLevels())
   if (!is.null(evaluation.measure))
     evaluation.measure = assertChoice(evaluation.measure, choices = listOMLEvaluationMeasures(verbosity = 0)$name)
+  if (!is.null(main_entity_type)) assertChoice(main_entity_type, choices = c("task", "run"))
 
   url.args = list(
     "task" = task.id,
@@ -155,7 +157,8 @@ generateAPICall = function(api.call, task.id = NULL, flow.id = NULL,
     "function" = evaluation.measure,
     "limit" = limit,
     "offset" = offset,
-    "status" = status
+    "status" = status,
+    "main_entity_type" = main_entity_type
   )
   url.args = Filter(function(x) !is.null(x), url.args)
 
