@@ -10,49 +10,32 @@ xmlNs = function(doc, path, optional) {
   }
 }
 
-xmlVal = function(doc, path, optional, fun) {
-  ns = xmlNs(doc, path, optional)
-  # path not found, also cant be no optional, otherwise exception in call before
-  if (is.null(ns))
-    return(NULL)
-  if (length(ns) == 1L) {
-    fun(xml2::xml_text(ns[[1L]]))
-  } else {
-    stopf("Multiple XML nodes found: %s", path)
+# function factory
+xmlVal = function(optional, fun) {
+  force(optional)
+  force(fun)
+  function(doc, path) {
+    ns = xmlNs(doc, path, optional)
+    # path not found, also cant be no optional, otherwise exception in call before
+    if (is.null(ns))
+      return(NULL)
+    if (length(ns) == 1L) {
+      fun(xml2::xml_text(ns[1L]))
+    } else {
+      stopf("Multiple XML nodes found: %s", path)
+    }
   }
 }
 
-xmlOValS = function(doc, path) {
-  xmlVal(doc, path, TRUE, as.character)
-}
-
-xmlOValI = function(doc, path) {
-  xmlVal(doc, path, TRUE, as.integer)
-}
-
-xmlOValR = function(doc, path) {
-  xmlVal(doc, path, TRUE, as.numeric)
-}
-
-xmlOValD = function(doc, path) {
-  xmlVal(doc, path, FALSE, as.Date)
-}
-
-xmlRValS = function(doc, path) {
-  xmlVal(doc, path, FALSE, as.character)
-}
-
-xmlRValI = function(doc, path) {
-  xmlVal(doc, path, FALSE, as.integer)
-}
-
-xmlRValR = function(doc, path) {
-  xmlVal(doc, path, FALSE, as.numeric)
-}
-
-xmlRValD = function(doc, path) {
-  xmlVal(doc, path, FALSE, function(x) as.POSIXct(x, tz = "CET"))
-}
+# build functions
+xmlOValS = xmlVal(TRUE, as.character)
+xmlOValI = xmlVal(TRUE, as.integer)
+xmlOValR = xmlVal(TRUE, as.numeric)
+xmlOValD = xmlVal(FALSE, as.Date)
+xmlRValS = xmlVal(FALSE, as.character)
+xmlRValI = xmlVal(FALSE, as.integer)
+xmlRValR = xmlVal(FALSE, as.numeric)
+xmlRValD = xmlVal(FALSE, function(x) as.POSIXct(x, tz = "CET"))
 
 xmlREValI = function(doc, path) {
   val = xmlRValI(doc, path)
@@ -106,9 +89,9 @@ xmlOValsMultNsSPara = function(doc, path, subs = NA_character_, exp.length) {
 }
 
 parseXMLResponse = function(file, msg = NA_character_,
-  type = NA_character_, as.text = FALSE) {
-
-  doc = try(xmlParse(file, asText = as.text))
+  type = NA_character_) {
+  message(msg)
+  doc = try(read_xml(file))
   if (is.error(doc))
     stopf("Error in parsing XML for type %s in file: %s", type, file)
 

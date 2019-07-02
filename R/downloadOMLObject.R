@@ -49,7 +49,7 @@ downloadOMLObject = function(id, object = c("data", "task", "flow", "run"), over
   }
   # look for an error in xml and stop if there is one
   xml.type = ifelse(object == "data", "data_set_description", object)
-  doc = tryCatch(parseXMLResponse(content, msg = paste0("Getting ", stri_replace_all_fixed(xml.type, "_", " ")), type = xml.type, as.text = TRUE),
+  doc = tryCatch(parseXMLResponse(paste(content, collapse = " "), msg = paste0("Getting ", stri_replace_all_fixed(xml.type, "_", " ")), type = xml.type),
     error = function(e) {
       unlink(f[[xml.ind]]$path, recursive = TRUE, force = TRUE)
       stop(e)
@@ -89,12 +89,9 @@ downloadOMLObject = function(id, object = c("data", "task", "flow", "run"), over
     }
   } else if (object == "run") {
     # get url of runs
-    url = vcapply(getNodeSet(doc, "/oml:run/oml:output_data/oml:file"),
-      function(X) {
-        child = getChildrenStrings(X)
-        if (child["name"] == "predictions") return(child["url"]) else ""
-      })
-    url = url[url != ""]
+      xpx = "/oml:run/oml:output_data/oml:file/oml:url[../oml:name[text() = 'predictions']]"
+      ns = xml_find_all(doc, xpx)
+      url = if (length(ns)>0) xml_text(ns[1])
   }
 
   if (!only.xml) {
