@@ -89,9 +89,9 @@ downloadOMLObject = function(id, object = c("data", "task", "flow", "run"), over
     }
   } else if (object == "run") {
     # get url of runs
-      xpx = "/oml:run/oml:output_data/oml:file/oml:url[../oml:name[text() = 'predictions']]"
-      ns = xml_find_all(doc, xpx)
-      url = if (length(ns)>0) xml_text(ns[1])
+      xpQ = "/oml:run/oml:output_data/oml:file/oml:url[../oml:name[text() = 'predictions']]"
+      ns = xml_find_all(doc, xpQ)
+      url = if (length(ns) > 0) xml_text(ns[1])
   }
 
   if (!only.xml) {
