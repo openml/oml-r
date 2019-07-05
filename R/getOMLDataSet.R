@@ -118,37 +118,28 @@ getOMLDataSetById = function(data.id = NULL, cache.only = FALSE, verbosity = NUL
 }
 
 parseOMLDataSetDescription = function(doc) {
-  default.target.attribute = xmlOValS(doc, "/oml:data_set_description/oml:default_target_attribute")
-  default.target.attribute = if (!is.null(default.target.attribute)) unlist(strsplit(default.target.attribute, ",")) else ""
-
-  ignore.attribute = xmlOValsMultNsS(doc, "/oml:data_set_description/oml:ignore_attribute")
-  ignore.attribute = if (!is.null(ignore.attribute)) unlist(strsplit(ignore.attribute, ","))
-
-  args = filterNull(list(
-    id = xmlRValI(doc, "/oml:data_set_description/oml:id"),
-    name = xmlRValS(doc, "/oml:data_set_description/oml:name"),
-    version = xmlRValS(doc, "/oml:data_set_description/oml:version"),
-    description = xmlRValS(doc, "/oml:data_set_description/oml:description"),
-    format = xmlRValS(doc, "/oml:data_set_description/oml:format"),
-    creator = xmlOValsMultNsS(doc, "/oml:data_set_description/oml:creator"),
-    contributor = xmlOValsMultNsS(doc, "/oml:data_set_description/oml:contributor"),
-    collection.date = xmlOValS(doc, "/oml:data_set_description/oml:collection_date"),
-    upload.date = xmlRValD(doc, "/oml:data_set_description/oml:upload_date"),
-    language = xmlOValS(doc, "/oml:data_set_description/oml:language"),
-    licence = xmlOValS(doc, "/oml:data_set_description/oml:licence"),
-    url = xmlRValS(doc, "/oml:data_set_description/oml:url"),
-    default.target.attribute = default.target.attribute,
-    row.id.attribute = xmlOValS(doc, "/oml:data_set_description/oml:row_id_attribute"),
-    ignore.attribute = ignore.attribute,
-    version.label = xmlOValS(doc, "/oml:data_set_description/oml:version_label"),
-    citation = xmlOValS(doc, "/oml:data_set_description/oml:citation"),
-    visibility = xmlOValS(doc, "/oml:data_set_description/oml:visibility"),
-    original.data.url = xmlOValS(doc, "/oml:data_set_description/oml:original_data_url"),
-    paper.url = xmlOValS(doc, "/oml:data_set_description/oml:paper.url"),
-    update.comment = xmlOValS(doc, "/oml:data_set_description/oml:update.comment"),
-    md5.checksum = xmlRValS(doc, "/oml:data_set_description/oml:md5_checksum"),
-    status = xmlRValS(doc, "/oml:data_set_description/oml:status"),
-    tags = xmlOValsMultNsS(doc, "/oml:data_set_description/oml:tag")
-  ))
-  do.call(makeOMLDataSetDescription, args)
+  # specify settings for the xml query
+  args_names = c("id", "name", "version", "description", "format", "creator", "contributor", 
+                 "collection_date", "upload_date", "language", "licence", "url", 
+                 "default_target_attribute", "row_id_attribute", "ignore_attribute", "version_label",
+                 "citation", "visibility", "original_data_url", "paper.url", "update.comment", 
+                 "md5_checksum", "status", "tag")
+  args_opt = c(FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE,
+               TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE)
+  args_mult = c(FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE,
+                FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE)
+  args_type = c("I", "S", "S", "S", "S", "S", "S", "S", "POSIXct", "S", "S", "S", "S", "S", "S", "S", 
+                "S", "S", "S", "S", "S", "S", "S", "S")
+  args_xpQ = sprintf("/oml:data_set_description/oml:%s", args_names)
+  
+  # build list containing queried values
+  args = lapply(seq_along(args_names), function(i) xml_query(doc, args_xpQ[i], args_opt[i], args_mult[i], args_type[i]))
+  names(args) = convertNamesOMLToR(args_names)
+  
+  args$default.target.attribute = if (!is.null(args$default.target.attribute)) 
+    unlist(strsplit(args$default.target.attribute, ",")) else ""
+  args$ignore.attribute = if (!is.null(args$ignore.attribute)) 
+    unlist(strsplit(args$ignore.attribute, ","))
+  
+  do.call(makeOMLDataSetDescription, filterNull(args))
 }
