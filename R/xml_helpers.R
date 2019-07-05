@@ -1,91 +1,24 @@
-xmlNs = function(doc, path, optional) {
-  ns = xml2::xml_find_all(doc, path)
-  if (length(ns) == 0L) {
-    if (optional)
-      NULL
-    else
-      stopf("Required XML node not found: %s", path)
-  } else {
-    ns 
-  }
+xml_check_length = function(x, opt, mult, path) {
+  if (length(x) == 0L && !opt) stopf("Required XML node not found: %s", path)
+  else if(length(x) > 1L && !mult) stopf("Multiple XML nodes found: %s", path)
+  else if(length(x) > 0L) x
 }
 
-# function factory
-xmlVal = function(optional, fun) {
-  force(optional)
-  force(fun)
-  function(doc, path) {
-    ns = xmlNs(doc, path, optional)
-    # path not found, also cant be no optional, otherwise exception in call before
-    if (is.null(ns))
-      return(NULL)
-    if (length(ns) == 1L) {
-      fun(xml2::xml_text(ns[1L]))
-    } else {
-      stopf("Multiple XML nodes found: %s", path)
-    }
-  }
+xml_make_type = function(x, type) {
+  switch(type, 
+         I = as.integer(x),
+         R = as.numeric(x),
+         S = as.character(x),
+         D = as.Date(x), 
+         POSIXct = as.POSIXct(x, tz = "CET"),
+         stopf("Conversion to type %s is not possible; Choose 'I', 'R', 'S', 'D' or 'POSIXct'", type)
+  )
 }
 
-# build functions
-xmlOValS = xmlVal(TRUE, as.character)
-xmlOValI = xmlVal(TRUE, as.integer)
-xmlOValR = xmlVal(TRUE, as.numeric)
-xmlOValD = xmlVal(FALSE, as.Date)
-xmlRValS = xmlVal(FALSE, as.character)
-xmlRValI = xmlVal(FALSE, as.integer)
-xmlRValR = xmlVal(FALSE, as.numeric)
-xmlRValD = xmlVal(FALSE, function(x) as.POSIXct(x, tz = "CET"))
-
-xmlREValI = function(doc, path) {
-  val = xmlRValI(doc, path)
-  if (is.na(val))
-    return(integer(0L))
-  else
-    return(val)
-}
-
-xmlREValR = function(doc, path) {
-  val = xmlRValR(doc, path)
-  if (is.na(val))
-    return(numeric(0L))
-  else
-    return(val)
-}
-
-xmlREValI = function(doc, path) {
-  val = xmlRValI(doc, path)
-  if (is.na(val))
-    return(integer(0L))
-  else
-    return(val)
-}
-
-xmlValsMultNs = function(doc, path, fun, val) {
-  ns = xml2::xml_find_all(doc, path)
-  vapply(ns, function(x) fun(xml_text(x)), val)
-}
-
-xmlValsMultNsS = function(doc, path) {
-  xmlValsMultNs(doc, path, as.character, character(1))
-}
-
-xmlOValsMultNsS = function(doc, path, empty.return = NULL) {
-  val = xmlValsMultNs(doc, path, as.character, character(1))
-  if (length(val) == 0L)
-    return(empty.return)
-  else
-    return(val)
-}
-
-xmlOValsMultNsSPara = function(doc, path, subs = NA_character_, exp.length) {
-  val = xmlValsMultNs(doc, path, as.character, character(1L))
-  if (length(val) == 0L)
-    return(rep(subs, times = exp.length))
-  val[is.na(val) | !nzchar(val)] = subs
-  if (length(val) != exp.length)
-    val = c(val, rep(subs, times = exp.length - length(val)))
-  return(val)
+xml_query = function(doc, path, opt, mult, type) {
+  val = xml_text(xml_find_all(doc, path))
+  val = xml_check_length(val, opt, mult, path)
+  if(!is.null(val)) xml_make_type(val, type)
 }
 
 parseXMLResponse = function(file, msg = NA_character_,

@@ -172,9 +172,9 @@ parseXMLError = function(response) {
                 additional.information = "Unable to parse XML error response."))
   }
   list(
-    code = xmlRValI(xml.doc, "/oml:error/oml:code"),
-    message = xmlOValS(xml.doc, "/oml:error/oml:message"),
-    additional.information = xmlOValS(xml.doc, "/oml:error/oml:additional_information")
+    code = xml_query(xml.doc, "/oml:error/oml:code", FALSE, FALSE, "I"),
+    message = xml_query(xml.doc, "/oml:error/oml:message", TRUE, FALSE, "S"),
+    additional.information = xml_query(xml.doc, "/oml:error/oml:additional_information", TRUE, FALSE, "S")
   )
 }
 

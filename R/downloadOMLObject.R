@@ -61,14 +61,14 @@ downloadOMLObject = function(id, object = c("data", "task", "flow", "run"), over
 
   # get url of files
   if (object == "data") {
-    url = xmlRValS(doc, "/oml:data_set_description/oml:url")
+    url = xml_query(doc, "/oml:data_set_description/oml:url", FALSE, FALSE, "S")
   } else if (object == "task") {
-    url = xmlOValS(doc, "/oml:task/oml:input/oml:estimation_procedure/oml:data_splits_url")
+    url = xml_query(doc, "/oml:task/oml:input/oml:estimation_procedure/oml:data_splits_url", TRUE, FALSE, "S")
   } else if (object == "flow") {
     #FIXME: Do this in findCachedFlow to find the filename of the flow (and if its binary or source)?
     # flows have either a source.url, a binary.url or nothing to be downloaded
-    source.url = xmlOValS(doc, "/oml:flow/oml:source_url")
-    binary.url = xmlOValS(doc, "/oml:flow/oml:binary_url")
+    source.url = xml_query(doc, "/oml:flow/oml:source_url", TRUE, FALSE, "S")
+    binary.url = xml_query(doc, "/oml:flow/oml:binary_url", TRUE, FALSE, "S")
     if (!is.null(source.url) & !is.null(binary.url)) {
       source.file = readLines(source.url, warn = FALSE)
       binary.file = readLines(binary.url, warn = FALSE)
@@ -90,8 +90,7 @@ downloadOMLObject = function(id, object = c("data", "task", "flow", "run"), over
   } else if (object == "run") {
     # get url of runs
       xpQ = "/oml:run/oml:output_data/oml:file/oml:url[../oml:name[text() = 'predictions']]"
-      ns = xml_find_all(doc, xpQ)
-      url = if (length(ns) > 0) xml_text(ns[1])
+      url = xml_query(doc, xpQ, TRUE, FALSE, "S")
   }
 
   if (!only.xml) {
