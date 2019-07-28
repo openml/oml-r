@@ -37,3 +37,4 @@
   res = rbindlist(studies_list)
   return(res)
 }
+listOMLBStudies = memoise(.listOMLBStudies)
