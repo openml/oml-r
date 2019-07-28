@@ -157,8 +157,8 @@ generateAPICall = function(api.call, task.id = NULL, flow.id = NULL,
     "function" = evaluation.measure,
     "limit" = limit,
     "offset" = offset,
-    "status" = status,
-    "main_entity_type" = main_entity_type
+    "main_entity_type" = main_entity_type,
+    "status" = status
   )
   url.args = Filter(function(x) !is.null(x), url.args)
 
