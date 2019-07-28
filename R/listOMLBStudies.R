@@ -11,11 +11,12 @@
   doc = read_xml(paste(content, collapse = " "))
   
   args_names = c("name", "id")
-  if (alias) args_names = c(args_names, "alias")
-
+  if (alias) args_names = c(args_names, "alias") # See https://docs.openml.org/benchmark/ , Listing the Benchmark Suites
+  
 #   ** Might suffice to just use this commented block instead of remaining part. It suffices, 
-#      if each study ALWAYS has at least the nodes/elements (which can be empty) "name", "id", "alias" **
+#   if each study ALWAYS has at least the nodes/elements (which can be empty) "name", "id", "alias" **
 #
+#   args_xpQ = sprintf("//oml:%s", args_names)
 #   args = lapply(seq_along(args_names), function(i) xml_query(doc, args_xpQ[i], FALSE, TRUE, "S"))
 #   names(args) = convertNamesOMLToR(args_names)
 # 
@@ -37,4 +38,5 @@
   res = rbindlist(studies_list)
   return(res)
 }
+
 listOMLBStudies = memoise(.listOMLBStudies)
