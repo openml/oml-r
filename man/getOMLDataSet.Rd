@@ -47,6 +47,8 @@ an \code{\link{OMLDataSet}}. Tasks can be downloaded with \code{\link{getOMLTask
 One of \code{data.id} or \code{data.name} must be passed.
 }
 \seealso{
+Other downloading functions: \code{\link{getOMLTask}}
+
 Other data set-related functions: \code{\link{OMLDataSetDescription}},
   \code{\link{OMLDataSet}}, \code{\link{listOMLDataSets}}
 }

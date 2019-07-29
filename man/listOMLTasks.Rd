@@ -100,7 +100,8 @@ Other listing functions: \code{\link{listOMLDataSetQualities}},
   \code{\link{listOMLRuns}}, \code{\link{listOMLSetup}},
   \code{\link{listOMLTaskTypes}}
 
-Other task-related functions: \code{\link{listOMLTaskTypes}}
+Other task-related functions: \code{\link{getOMLTask}},
+  \code{\link{listOMLTaskTypes}}, \code{\link{makeOMLTask}}
 }
 \concept{listing functions}
 \concept{task-related functions}
