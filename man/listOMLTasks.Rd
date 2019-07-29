@@ -98,7 +98,6 @@ Other listing functions: \code{\link{listOMLDataSetQualities}},
   \code{\link{listOMLEstimationProcedures}},
   \code{\link{listOMLEvaluationMeasures}},
   \code{\link{listOMLRuns}}, \code{\link{listOMLSetup}},
-  \code{\link{listOMLStudies}},
   \code{\link{listOMLTaskTypes}}
 
 Other task-related functions: \code{\link{listOMLTaskTypes}}

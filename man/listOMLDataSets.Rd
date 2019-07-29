@@ -75,9 +75,11 @@ Other listing functions: \code{\link{listOMLDataSetQualities}},
   \code{\link{listOMLEstimationProcedures}},
   \code{\link{listOMLEvaluationMeasures}},
   \code{\link{listOMLRuns}}, \code{\link{listOMLSetup}},
-  \code{\link{listOMLStudies}},
   \code{\link{listOMLTaskTypes}},
   \code{\link{listOMLTasks}}
+
+Other data set-related functions: \code{\link{OMLDataSetDescription}},
+  \code{\link{OMLDataSet}}, \code{\link{getOMLDataSet}}
 }
 \concept{data set-related functions}
 \concept{listing functions}
