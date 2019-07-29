@@ -35,7 +35,8 @@ Other listing functions: \code{\link{listOMLDataSetQualities}},
   \code{\link{listOMLRuns}}, \code{\link{listOMLSetup}},
   \code{\link{listOMLTasks}}
 
-Other task-related functions: \code{\link{listOMLTasks}}
+Other task-related functions: \code{\link{getOMLTask}},
+  \code{\link{listOMLTasks}}, \code{\link{makeOMLTask}}
 }
 \concept{listing functions}
 \concept{task-related functions}
